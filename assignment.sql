@@ -170,7 +170,7 @@ FETCH NEXT FROM @MyCursor
 INTO @Ename
 WHILE @@FETCH_STATUS = 0
 	BEGIN
-		Set @EnameAll =  @Ename
+		Set @EnameAll =  Concat(@EnameAll, @Ename)
 		print @EnameAll
 		FETCH NEXT FROM @MyCursor
 		INTO @Ename
