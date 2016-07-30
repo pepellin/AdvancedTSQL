@@ -1,8 +1,8 @@
 /*
 Create an employee Log table which contain all the rows with operation (insert/update/delete) performed on rows
 */
-Use testData
-GO
+-- Use testData
+-- GO
 
 Create Table EmpDemo
 (
@@ -12,7 +12,7 @@ Salary Money,
 DeptNo int
 );
 
-Create Table EmpDemo_Log
+Create Table [EmpDemo_Log]
 (
 EmpNo int ,
 Ename Varchar(15),
@@ -71,7 +71,7 @@ Begin
 END
 
 Drop trigger AfterUpdate
-Insert Into EmpDemo Values ('test!', 150.00, 3);
+Insert Into EmpDemo Values ('testtt!', 150.00, 3);
 select * from EmpDemo;
 select * from EmpDemo_Log;
 Delete from EmpDemo Where EmpNo = 10;
@@ -80,20 +80,26 @@ Delete from EmpDemo_Log;
 Update EmpDemo Set Ename = 'updated test' where EmpNo = 11;
 
 --2.	Write a procedure to get employee data based on DeptNo. If value for DeptNo  is not given get all employees (Using Optional parameter)
-Create Procedure GetEmpData @Number int = null
+Create Procedure 
+GetEmpData 
+(
+	@Number int = null
+)
 As
-If (@Number IS NULL)
-	Begin
-		Select * From EmpDemo;
-	End
-Else
-	Begin
-		Select * From EmpDemo Where DeptNo = @Number;
-	End
+Begin
+	If (@Number IS NULL)
+		Begin
+			Select * From EmpDemo;
+		End
+	Else
+		Begin
+			Select * From EmpDemo Where DeptNo = @Number;
+		End
+End
 Go
 
 drop procedure GetEmpData
-Exec GetEmpData @Number = 3
+Exec GetEmpData @Number = 1
 Select * from EmpDemo
 
 --3.	Write a procedure to insert data into EmpDemo table and get new EmpNo generated as Output parameter
@@ -106,12 +112,14 @@ Create Procedure InsertToEmpDemo
 )
 As
 Begin 
-	Insert into EmpDemo Values (@Ename, @Salary, @DeptNo)
+	Insert into EmpDemo Values (@Ename, @Salary, @DeptNo);
 End
+GO
 
-Drop Procedure InsertToEmpDemo
-Declare @EmpNoReturn int
-Exec InsertToEmpDemo @Ename = 'John', @Salary = 100.00, @DeptNo = 20, @EmpNo = @EmpNoReturn Output
+Drop Procedure InsertToEmpDemo;
+Declare @EmpNoReturn int;
+Exec InsertToEmpDemo 'John', 100.00, 20, @EmpNoReturn Output;
+Print @EmpNoReturn;
 
 Select * from EmpDemo;
 Select * from EmpDemo_Log;
